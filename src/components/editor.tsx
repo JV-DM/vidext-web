@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Tldraw, getSnapshot, loadSnapshot } from "tldraw";
-import "tldraw/tldraw.css";
-import { trpc } from "@/lib/trpc";
-import debounce from "lodash.debounce";
-import { useCallback } from "react";
+import { Tldraw, getSnapshot, loadSnapshot } from 'tldraw';
+import 'tldraw/tldraw.css';
+import { trpc } from '@/lib/trpc';
+import debounce from 'lodash.debounce';
+import { useCallback } from 'react';
 
 export const EditorComponent = () => {
   const {
@@ -20,7 +20,7 @@ export const EditorComponent = () => {
         { data: store },
         {
           onError: (error) => {
-            console.error("Failed to save store data:", error);
+            console.error('Failed to save store data:', error);
           },
         }
       );

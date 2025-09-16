@@ -1,0 +1,9 @@
+node_modules
+.next
+.env.local
+.env.production.local
+.env.development.local
+.vercel
+build
+dist
+coverage

@@ -1,5 +1,5 @@
-import { router } from "./trpc";
-import { editorRouter } from "./routers/editor";
+import { router } from './trpc';
+import { editorRouter } from './routers/editor';
 
 export const appRouter = router({
   editor: editorRouter,

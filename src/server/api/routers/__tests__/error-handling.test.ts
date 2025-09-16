@@ -1,14 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { appRouter } from "../../root";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { appRouter } from '../../root';
 
-describe("Error Handling", () => {
+describe('Error Handling', () => {
   let caller: ReturnType<typeof appRouter.createCaller>;
 
   beforeEach(() => {
     caller = appRouter.createCaller({});
   });
 
-  it("should handle undefined input data", async () => {
+  it('should handle undefined input data', async () => {
     const result = await caller.editor.saveStoreData({
       data: undefined as any,
     });
@@ -16,7 +16,7 @@ describe("Error Handling", () => {
     expect(result.data).toBe(undefined);
   });
 
-  it("should handle very large data objects", async () => {
+  it('should handle very large data objects', async () => {
     const largeArray = new Array(10000).fill(0).map((_, i) => ({
       id: i,
       data: `large-data-${i}`.repeat(100),
@@ -34,8 +34,8 @@ describe("Error Handling", () => {
     expect(retrieved.data).toEqual(largeData);
   });
 
-  it("should handle circular references gracefully", async () => {
-    const circularData: any = { name: "test" };
+  it('should handle circular references gracefully', async () => {
+    const circularData: any = { name: 'test' };
     circularData.self = circularData;
 
     try {
@@ -47,21 +47,21 @@ describe("Error Handling", () => {
     }
   });
 
-  it("should handle special JavaScript values", async () => {
+  it('should handle special JavaScript values', async () => {
     const specialValues = {
       infinity: Infinity,
       negInfinity: -Infinity,
       nan: NaN,
       date: new Date(),
       regex: /test/g,
-      func: () => "test",
+      func: () => 'test',
     };
 
     const result = await caller.editor.saveStoreData({ data: specialValues });
     expect(result.success).toBe(true);
   });
 
-  it("should handle concurrent save operations", async () => {
+  it('should handle concurrent save operations', async () => {
     const promises = Array.from({ length: 10 }, (_, i) =>
       caller.editor.saveStoreData({ data: { concurrent: i } })
     );
@@ -74,11 +74,11 @@ describe("Error Handling", () => {
 
     const finalResult = await caller.editor.getStoreData();
     expect(finalResult.data).toBeDefined();
-    expect(typeof finalResult.data.concurrent).toBe("number");
+    expect(typeof finalResult.data.concurrent).toBe('number');
   });
 
-  it("should handle empty and malformed data", async () => {
-    const testCases = [{}, [], "", 0, false, null];
+  it('should handle empty and malformed data', async () => {
+    const testCases = [{}, [], '', 0, false, null];
 
     for (const testData of testCases) {
       const result = await caller.editor.saveStoreData({ data: testData });
@@ -89,12 +89,12 @@ describe("Error Handling", () => {
     }
   });
 
-  it("should maintain data integrity after multiple operations", async () => {
+  it('should maintain data integrity after multiple operations', async () => {
     const operations = [
-      { data: { step: 1, content: "first" } },
-      { data: { step: 2, content: "second" } },
+      { data: { step: 1, content: 'first' } },
+      { data: { step: 2, content: 'second' } },
       { data: null },
-      { data: { step: 3, content: "third" } },
+      { data: { step: 3, content: 'third' } },
     ];
 
     for (const operation of operations) {
