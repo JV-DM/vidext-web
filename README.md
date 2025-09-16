@@ -2,6 +2,11 @@
 
 Simple drawing editor with auto-save functionality built with Next.js, tRPC, and Tldraw.
 
+## Live Demo
+
+🌐 **Try it live:** [https://vidext-web-s9ep.vercel.app](https://vidext-web-s9ep.vercel.app)
+
+
 ## Setup Instructions
 
 ### Prerequisites
