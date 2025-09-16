@@ -1,9 +1,11 @@
 import { EditorComponent } from '@/components/editor';
 
-export default function Home() {
+const Home = () => {
   return (
     <div className="h-screen w-full">
       <EditorComponent />
     </div>
   );
-}
+};
+
+export default Home;
