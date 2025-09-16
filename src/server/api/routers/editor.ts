@@ -1,7 +1,9 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc';
 
-let storeData: any = null;
+type StoreData = Record<string, unknown> | null;
+
+let storeData: StoreData = null;
 
 export const editorRouter = router({
   getStoreData: publicProcedure.query(async () => {

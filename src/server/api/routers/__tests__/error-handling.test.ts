@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { appRouter } from '../../root';
 
 describe('Error Handling', () => {
@@ -10,7 +10,7 @@ describe('Error Handling', () => {
 
   it('should handle undefined input data', async () => {
     const result = await caller.editor.saveStoreData({
-      data: undefined as any,
+      data: undefined,
     });
     expect(result.success).toBe(true);
     expect(result.data).toBe(undefined);
@@ -35,7 +35,8 @@ describe('Error Handling', () => {
   });
 
   it('should handle circular references gracefully', async () => {
-    const circularData: any = { name: 'test' };
+    type CircularData = { name: string; self?: CircularData };
+    const circularData: CircularData = { name: 'test' };
     circularData.self = circularData;
 
     try {
@@ -74,7 +75,14 @@ describe('Error Handling', () => {
 
     const finalResult = await caller.editor.getStoreData();
     expect(finalResult.data).toBeDefined();
-    expect(typeof finalResult.data.concurrent).toBe('number');
+    expect(finalResult.data).not.toBeNull();
+    if (
+      finalResult.data &&
+      typeof finalResult.data === 'object' &&
+      'concurrent' in finalResult.data
+    ) {
+      expect(typeof finalResult.data.concurrent).toBe('number');
+    }
   });
 
   it('should handle empty and malformed data', async () => {

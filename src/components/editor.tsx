@@ -1,10 +1,10 @@
 'use client';
 
-import { Tldraw, getSnapshot, loadSnapshot } from 'tldraw';
+import { Tldraw, getSnapshot, loadSnapshot, TLEditorSnapshot } from 'tldraw';
 import 'tldraw/tldraw.css';
 import { trpc } from '@/lib/trpc';
 import debounce from 'lodash.debounce';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const EditorComponent = () => {
   const {
@@ -14,8 +14,8 @@ export const EditorComponent = () => {
   } = trpc.editor.getStoreData.useQuery();
   const saveStoreData = trpc.editor.saveStoreData.useMutation();
 
-  const handlePersistanceChange = useCallback(
-    debounce((store: any) => {
+  const saveFunction = useCallback(
+    (store: TLEditorSnapshot) => {
       saveStoreData.mutate(
         { data: store },
         {
@@ -24,8 +24,13 @@ export const EditorComponent = () => {
           },
         }
       );
-    }, 500),
+    },
     [saveStoreData]
+  );
+
+  const handlePersistanceChange = useMemo(
+    () => debounce(saveFunction, 500),
+    [saveFunction]
   );
 
   if (isLoading) {

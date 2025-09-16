@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import debounce from 'lodash.debounce';
+import debounce, { type DebouncedFunc } from 'lodash.debounce';
 
 vi.mock('lodash.debounce');
 
@@ -28,15 +28,22 @@ describe('Debounce Functionality', () => {
 
   it('should call debounced function with correct parameters', () => {
     const mockFn = vi.fn();
-    const debouncedFn = vi.fn();
 
-    vi.mocked(debounce).mockImplementation((fn, delay) => {
-      let timeoutId: NodeJS.Timeout;
-      return ((...args: any[]) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => fn(...args), delay);
-      }) as any;
-    });
+    vi.mocked(debounce).mockImplementation(
+      <T extends (...args: Parameters<T>) => ReturnType<T>>(
+        fn: T,
+        delay?: number
+      ) => {
+        let timeoutId: NodeJS.Timeout;
+        const debouncedFn = ((...args: Parameters<T>) => {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => fn(...args), delay ?? 0);
+        }) as DebouncedFunc<T>;
+        debouncedFn.cancel = vi.fn();
+        debouncedFn.flush = vi.fn();
+        return debouncedFn;
+      }
+    );
 
     const result = debounce(mockFn, 500);
 
@@ -50,12 +57,15 @@ describe('Debounce Functionality', () => {
   it('should cancel previous calls when called multiple times', () => {
     const mockFn = vi.fn();
 
-    vi.mocked(debounce).mockImplementation((fn, delay) => {
+    vi.mocked(debounce).mockImplementation(<T extends (...args: Parameters<T>) => ReturnType<T>>(fn: T, delay?: number) => {
       let timeoutId: NodeJS.Timeout;
-      return ((...args: any[]) => {
+      const debouncedFn = ((...args: Parameters<T>) => {
         clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => fn(...args), delay);
-      }) as any;
+        timeoutId = setTimeout(() => fn(...args), delay ?? 0);
+      }) as DebouncedFunc<T>;
+      debouncedFn.cancel = vi.fn();
+      debouncedFn.flush = vi.fn();
+      return debouncedFn;
     });
 
     const debouncedFn = debounce(mockFn, 500);
@@ -73,12 +83,15 @@ describe('Debounce Functionality', () => {
   it('should work with different delay values', () => {
     const mockFn = vi.fn();
 
-    vi.mocked(debounce).mockImplementation((fn, delay) => {
+    vi.mocked(debounce).mockImplementation(<T extends (...args: Parameters<T>) => ReturnType<T>>(fn: T, delay?: number) => {
       let timeoutId: NodeJS.Timeout;
-      return ((...args: any[]) => {
+      const debouncedFn = ((...args: Parameters<T>) => {
         clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => fn(...args), delay);
-      }) as any;
+        timeoutId = setTimeout(() => fn(...args), delay ?? 0);
+      }) as DebouncedFunc<T>;
+      debouncedFn.cancel = vi.fn();
+      debouncedFn.flush = vi.fn();
+      return debouncedFn;
     });
 
     const shortDebounce = debounce(mockFn, 100);
