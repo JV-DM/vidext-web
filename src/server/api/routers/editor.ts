@@ -17,6 +17,7 @@ export const editorRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      // TODO: Replace in-memory storage with database persistence
       storeData = input.data;
       return { success: true, data: storeData };
     }),
