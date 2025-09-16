@@ -5,7 +5,6 @@ let storeData: any = null;
 
 export const editorRouter = router({
   getStoreData: publicProcedure.query(async () => {
-    console.log("getStoreData requested - current store:", storeData);
     return { data: storeData };
   }),
 
