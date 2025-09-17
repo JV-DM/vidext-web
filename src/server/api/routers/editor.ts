@@ -21,4 +21,10 @@ export const editorRouter = router({
       storeData = input.data;
       return { success: true, data: storeData };
     }),
+
+  clearStore: publicProcedure
+    .mutation(async () => {
+      storeData = null;
+      return { success: true, message: 'Store cleared successfully' };
+    }),
 });
